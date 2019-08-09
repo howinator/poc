@@ -1,0 +1,44 @@
+version: 2
+
+workflows:
+  version: 2
+  do-da-things:
+    jobs:
+      - build:
+          filters:
+            tags:
+              only: /v\d*/  # Only auto-release version tags
+            branches:
+              only: /master/  # Ignore all branches
+      - deploy:
+          filters:
+            tags:
+              only: /v\d*/  # Only auto-release version tags
+            branches:
+              only: /master/  # Ignore all branches
+          requires:
+            - build
+
+jobs:
+  build:
+    docker:
+      - image: nrmitchi/docker-ecr:17.11.0
+    steps:
+      - checkout
+      - run:
+          name: Build Image
+          command: |
+
+            echo "This is a fake build. I'm not actually doing anything"
+
+  deploy:
+    docker:
+      - image: nrmitchi/k8s-utils
+    steps:
+      - checkout
+      - run:
+          name: Deploy
+          command: |
+
+            echo "This is a fake deploy. I'm not actually doing anything"
+
